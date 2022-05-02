@@ -23,8 +23,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('brands', VehicleBrandController::class);
-Route::resource('categories', VehicleCategoryController::class);
-Route::resource('vehicles', VehicleController::class);
+    Route::resource('brands', VehicleBrandController::class)->only(['index', 'show']);
+    Route::resource('categories', VehicleCategoryController::class)->only(['index', 'show']);
+    Route::resource('vehicles', VehicleController::class)->only(['index', 'show']);
+
+Route::middleware(['auth:sanctum'])->group(function(){
+    Route::resource('brands', VehicleBrandController::class)->only(['create', 'store', 'update', 'destroy']);
+    Route::resource('categories', VehicleCategoryController::class)->only(['create', 'store', 'update', 'destroy']);
+    Route::resource('vehicles', VehicleController::class)->only(['create', 'store', 'update', 'destroy']);
+});
+
+
 Route::resource('reservations', ReservationController::class);
 Route::resource('addons', AddonController::class);
